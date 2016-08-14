@@ -129,8 +129,8 @@ function getWeather(day) {
                 title: 'Weather for ' + simpleDate,
                 text: text,
                 image: {
-                    smallImageUrl: 'https://alexa-forecast.herokuapp.com/images/' + data.icon + '.png',
-                    largeImageUrl: 'https://alexa-forecast.herokuapp.com/images/' + data.icon + '.png'
+                    smallImageUrl: 'https://s3.amazonaws.com/alexa-forecaster/' + data.icon + '.png',
+                    largeImageUrl: 'https://s3.amazonaws.com/alexa-forecaster/' + data.icon + '.png'
                 }
             };
 
