@@ -35,9 +35,10 @@ module.exports = function(req, res) {
             req.body.request.intent.slots.When.value) {
 
             getWeather(new Date(req.body.request.intent.slots.When.value))
-                .then(function(weather, card) {
+                .then(function(weather) {
+                    console.log('responding to weather request for ' + req.body.request.intent.slots.When.value + ' with ', weather);
                     res.json(
-                        buildResponse( {}, '<speak>' + weather + '</speak>', card, true )
+                        buildResponse( {}, '<speak>' + weather.text + '</speak>', weather.card, true )
                     );
                 })
                 .catch(function(err) {
@@ -133,14 +134,14 @@ function getWeather(day) {
                 }
             };
 
-            resolve( text, card );
+            resolve( { text, card } );
         });
     });
 }
 
 
 function getWeatherText(data) {
-    var conditions;
+    let conditions;
 
     if (data.precipProbability > 0.7 && data.precipIntensityMax > 0.05) {
         if (data.precipType === 'rain') {
