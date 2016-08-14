@@ -16,6 +16,10 @@ You can run this application simply enough, just clone the repo, install the dep
 ~/alexa-forecaster$ node .
 ```
 
+If you want to use cards and images on them, you'll need to also set the location for your image store. Simply set this environment variable to the location of your image store: `WEATHER_IMAGE_BASE`
+
+That server will need to have images for the various `icon` values that forecast.io returns. It must also implement the [Alexa image hosting requirements](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/providing-home-cards-for-the-amazon-alexa-app#image_hosting) defined in their developer documentation.
+
 ### Sending Test Requests
 
 You can use a tool like Postman to send test requests to your local server while in development. Here's an example of the body of a `POST` request that should be handled successfully by this skill:

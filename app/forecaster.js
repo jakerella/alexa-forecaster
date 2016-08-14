@@ -4,6 +4,7 @@ let request = require('request');
 
 const VERSION = '1.0';
 const BASE_URL = 'https://api.forecast.io/forecast/' + process.env.WEATHER_API_KEY + '/38.9649734,-77.0207249';
+const IMAGE_BASE = process.env.WEATHER_IMAGE_BASE;
 
 module.exports = function(req, res) {
 
@@ -129,8 +130,8 @@ function getWeather(day) {
                 title: 'Weather for ' + simpleDate,
                 text: text,
                 image: {
-                    smallImageUrl: 'https://s3.amazonaws.com/alexa-forecaster/' + data.icon + '.png',
-                    largeImageUrl: 'https://s3.amazonaws.com/alexa-forecaster/' + data.icon + '.png'
+                    smallImageUrl: IMAGE_BASE + data.icon + '.png',
+                    largeImageUrl: IMAGE_BASE + data.icon + '.png'
                 }
             };
 
