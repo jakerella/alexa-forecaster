@@ -9,6 +9,8 @@ let app = express();
 
 app.set('port', process.env.PORT || 3000);
 
+app.use(express.static('public'));
+
 app.use(bodyParser.json({
     verify: function getRawBody(req, res, buf) {
         req.rawBody = buf.toString();

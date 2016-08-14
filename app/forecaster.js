@@ -14,6 +14,7 @@ module.exports = function(req, res) {
             buildResponse(
                 { dateRequested: true },
                 '<speak>I can tell you the weather<break time="1s"/> but you must give me a day!</speak>',
+                {},
                 false
             )
         );
@@ -34,14 +35,14 @@ module.exports = function(req, res) {
             req.body.request.intent.slots.When.value) {
 
             getWeather(new Date(req.body.request.intent.slots.When.value))
-                .then(function(weather) {
+                .then(function(weather, card) {
                     res.json(
-                        buildResponse( {}, '<speak>' + weather + '</speak>', true )
+                        buildResponse( {}, '<speak>' + weather + '</speak>', card, true )
                     );
                 })
                 .catch(function(err) {
                     res.json(
-                        buildResponse( {}, '<speak>' + err + '</speak>', true )
+                        buildResponse( {}, '<speak>' + err + '</speak>', {}, true )
                     );
                 });
 
@@ -53,6 +54,7 @@ module.exports = function(req, res) {
                     buildResponse(
                         {},
                         '<speak>If you don\'t want to hear the weather then leave me alone.</speak>',
+                        {},
                         true
                     )
                 );
@@ -61,6 +63,7 @@ module.exports = function(req, res) {
                     buildResponse(
                         { dateRequested: true },
                         '<speak>I can tell you the weather<break time="1s"/> but you must give me a day!</speak>',
+                        {},
                         false
                     )
                 );
@@ -75,7 +78,7 @@ module.exports = function(req, res) {
 };
 
 
-function buildResponse(session, speech, end) {
+function buildResponse(session, speech, card, end) {
     return {
         version: VERSION,
         sessionAttributes: session,
@@ -84,6 +87,7 @@ function buildResponse(session, speech, end) {
                 type: 'SSML',
                 ssml: speech
             },
+            card: card,
             shouldEndSession: !!end
         }
     };
@@ -100,7 +104,7 @@ function getWeather(day) {
             url: BASE_URL,
             json: true
         }, function(err, res, body) {
-            let data,
+            let data, text, card,
                 simpleDate = day.toISOString().split('T')[0];
 
             if (err || res.statusCode >= 400) {
@@ -118,7 +122,18 @@ function getWeather(day) {
                 return reject('I have no data for that day!');
             }
 
-            resolve( getWeatherText(data) );
+            text = getWeatherText(data);
+            card = {
+                type: 'Standard',
+                title: 'Weather for ' + simpleDate,
+                text: text,
+                image: {
+                    smallImageUrl: 'https://alexa-forecast.herokuapp.com/images/' + data.icon + '.png',
+                    largeImageUrl: 'https://alexa-forecast.herokuapp.com/images/' + data.icon + '.png'
+                }
+            };
+
+            resolve( text, card );
         });
     });
 }
