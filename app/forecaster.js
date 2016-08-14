@@ -47,7 +47,8 @@ module.exports = function(req, res) {
 
         } else {
 
-            if (req.body.session.attributes.dateRequested) {
+            if (req.body.session.attributes &&
+                req.body.session.attributes.dateRequested) {
                 res.json(
                     buildResponse(
                         {},
