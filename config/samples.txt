@@ -1,0 +1,5 @@
+
+Weather  what's the weather for {When}
+Weather  what I should expect on {When}
+Weather  tell me the weather
+Weather  {When}
